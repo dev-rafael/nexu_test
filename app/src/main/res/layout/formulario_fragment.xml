@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout_formulario_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".FormularioFragment">
+
+    <TextView
+        android:id="@+id/textView_modelos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Modelos"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="#000000">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInput_agregar_marca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Marca: "
+            android:inputType="textShortMessage|textCapWords" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/button_agregar_marca"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:text="Agregar Marca"
+        android:textAllCaps="false"
+        android:textSize="12sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="12dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="#000000">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInput_seleccionar_marca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Marca:    *" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="#000000">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInput_modelo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Modelo: *"
+            android:inputType="textShortMessage|textCapWords" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="#000000">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInput_precio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Precio:  *"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/button_agregar_modelo"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:text="Agregar Modelo"
+        android:textAllCaps="false"
+        android:textSize="12sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="12dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_lista_modelos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
