@@ -1,15 +1,14 @@
 package com.rgdev.test_nexu
 
-import androidx.lifecycle.ViewModelProviders
+import com.rgdev.test_nexu.R
+
 import android.os.Bundle
 import android.util.Log
-import android.util.SparseArray
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,9 +24,10 @@ class FormularioFragment : Fragment() {
 
     private lateinit var viewModel: FormularioViewModel
     private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: MyAdapter
 
-    private class MyAdapter(private val myDataset: Array<ModelListItem>): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
-        class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view){
+    private class MyAdapter(var myDataset: Array<ModelListItem>): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+        class MyViewHolder(view: View) : RecyclerView.ViewHolder(view){
             val marca: TextView
             val modelo: TextView
             val precio: TextView
@@ -43,7 +43,7 @@ class FormularioFragment : Fragment() {
                                         viewType: Int): MyViewHolder {
             // create a new view
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.formulario_fragment, parent, false)
+                .inflate(R.layout.model_list_item, parent, false)
             return MyViewHolder(view)
         }
 
@@ -71,12 +71,23 @@ class FormularioFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(FormularioViewModel::class.java)
 
         recyclerView = recyclerView_lista_modelos
-        recyclerView.adapter = MyAdapter(viewModel.listaModelos.toTypedArray())
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(false)
+            //itemAnimator = null
+        }
+        adapter = MyAdapter(viewModel.listaModelos.toTypedArray())
+        recyclerView.adapter = adapter
 
         button_agregar_marca.setOnClickListener {
             val text = textInput_agregar_marca.text.toString()
-            if (!text.isEmpty()){
+            val noMarca = text.isEmpty()
+
+            textLayout_agregar_marca.error = if(noMarca) "* Campo requerido" else null
+
+            if (noMarca){
                 viewModel.listaMarcas.add(text)
+                textInput_agregar_marca.setText("")
                 Log.i("Lista Marcas", viewModel.listaMarcas.toString())
                 //textInput_seleccionar_marca.autofill(viewModel.listaMarcas.toTypedArray<String>())
             }
@@ -86,12 +97,26 @@ class FormularioFragment : Fragment() {
             val marca = textInput_seleccionar_marca.text.toString()
             val modelo = textInput_modelo.text.toString()
             val precio = textInput_precio.text.toString()
-            if(!marca.isEmpty() && !modelo.isEmpty() && !precio.isEmpty()){
-                viewModel.listaModelos.add(ModelListItem(marca, modelo, precio.toInt()))
 
-                Log.i("Lista Modelos", viewModel.listaModelos.toString())
+            val noMarca = marca.isEmpty()
+            val noModelo = modelo.isEmpty()
+            val noPrecio = precio.isEmpty()
+
+            textLayout_seleccionar_marca.error = if(noMarca) "* Campo requerido" else null
+            textLayout_modelo.error = if(noModelo) "* Campo requerido" else null
+            textLayout_precio.error = if(noPrecio) "* Campo requerido" else null
+
+            if(!noMarca && !noModelo && !noPrecio){
+                textInput_seleccionar_marca.setText("")
+                textInput_modelo.setText("")
+                textInput_precio.setText("")
+
+                viewModel.listaModelos.add(ModelListItem(marca, modelo, precio.toInt()))
+                adapter.myDataset = viewModel.listaModelos.toTypedArray()
+                adapter.notifyItemInserted(viewModel.listaModelos.size-1)
 
             }
+            Log.i("Lista Modelos", viewModel.listaModelos.toString())
         }
 
     }

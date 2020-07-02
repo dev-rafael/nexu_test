@@ -8,7 +8,7 @@ class FormularioViewModel : ViewModel() {
 
     init {
         listaMarcas = mutableListOf("a")
-        listaModelos = mutableListOf()
+        listaModelos = mutableListOf(ModelListItem("Test", "123", 31416))
     }
 
 }
