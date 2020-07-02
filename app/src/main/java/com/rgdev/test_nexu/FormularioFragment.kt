@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,16 +27,18 @@ class FormularioFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MyAdapter
 
-    private class MyAdapter(var myDataset: Array<ModelListItem>): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+    private class MyAdapter(var myDataset: Array<ModelListItem>, var removeFun: (Int)->Unit): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
         class MyViewHolder(view: View) : RecyclerView.ViewHolder(view){
             val marca: TextView
             val modelo: TextView
             val precio: TextView
+            val remove: ImageButton
 
             init {
                 marca = view.textView_marca_item
                 modelo = view.textView_modelo_item
                 precio = view.textView_precio_item
+                remove = view.imageButton_remove_item
             }
         }
 
@@ -55,6 +58,9 @@ class FormularioFragment : Fragment() {
             holder.marca.text = myDataset[position].marca
             holder.modelo.text = myDataset[position].modelo
             holder.precio.text = myDataset[position].precio.toString()
+            holder.remove.setOnClickListener {
+                removeFun(holder.adapterPosition)
+            }
         }
     }
 
@@ -76,7 +82,7 @@ class FormularioFragment : Fragment() {
             setHasFixedSize(false)
             //itemAnimator = null
         }
-        adapter = MyAdapter(viewModel.listaModelos.toTypedArray())
+        adapter = MyAdapter(viewModel.listaModelos.toTypedArray(), ::removeItem)
         recyclerView.adapter = adapter
 
         button_agregar_marca.setOnClickListener {
@@ -85,7 +91,7 @@ class FormularioFragment : Fragment() {
 
             textLayout_agregar_marca.error = if(noMarca) "* Campo requerido" else null
 
-            if (noMarca){
+            if (!noMarca){
                 viewModel.listaMarcas.add(text)
                 textInput_agregar_marca.setText("")
                 Log.i("Lista Marcas", viewModel.listaMarcas.toString())
@@ -111,6 +117,10 @@ class FormularioFragment : Fragment() {
                 textInput_modelo.setText("")
                 textInput_precio.setText("")
 
+                if (viewModel.listaModelos.isEmpty()){
+                    linearLayout_list_header.visibility = View.VISIBLE
+                }
+
                 viewModel.listaModelos.add(ModelListItem(marca, modelo, precio.toInt()))
                 adapter.myDataset = viewModel.listaModelos.toTypedArray()
                 adapter.notifyItemInserted(viewModel.listaModelos.size-1)
@@ -119,6 +129,15 @@ class FormularioFragment : Fragment() {
             Log.i("Lista Modelos", viewModel.listaModelos.toString())
         }
 
+    }
+
+    fun removeItem(index: Int){
+        viewModel.listaModelos.removeAt(index)
+        adapter.myDataset = viewModel.listaModelos.toTypedArray()
+        adapter.notifyItemRemoved(index)
+        if (viewModel.listaModelos.isEmpty()){
+            linearLayout_list_header.visibility = View.INVISIBLE
+        }
     }
 
 }
