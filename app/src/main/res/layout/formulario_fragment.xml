@@ -50,25 +50,20 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textLayout_seleccionar_marca"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginEnd="36dp"
-        app:boxBackgroundMode="outline"
-        app:boxStrokeColor="#000000">
+        android:hint="Marca: *">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
             android:id="@+id/textInput_seleccionar_marca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Marca:    *" />
+            android:inputType="none"
+            android:padding="16dp" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <Spinner
-        android:id="@+id/spinner_marca"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textLayout_modelo"

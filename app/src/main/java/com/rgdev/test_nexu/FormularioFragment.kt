@@ -1,13 +1,13 @@
 package com.rgdev.test_nexu
 
-import com.rgdev.test_nexu.R
-
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
@@ -25,7 +25,8 @@ class FormularioFragment : Fragment() {
 
     private lateinit var viewModel: FormularioViewModel
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: MyAdapter
+    private lateinit var modelAdapter: MyAdapter
+    private lateinit var marcaAdapter: ArrayAdapter<String>
 
     private class MyAdapter(var myDataset: Array<ModelListItem>, var removeFun: (Int)->Unit): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
         class MyViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -75,6 +76,10 @@ class FormularioFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(FormularioViewModel::class.java)
+        //val testList = arrayOf("Item 1", "Item 2", "Item3")
+        marcaAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, viewModel.listaMarcas)
+        textInput_seleccionar_marca.setAdapter(marcaAdapter)
+
 
         recyclerView = recyclerView_lista_modelos
         recyclerView.apply {
@@ -82,8 +87,8 @@ class FormularioFragment : Fragment() {
             setHasFixedSize(false)
             //itemAnimator = null
         }
-        adapter = MyAdapter(viewModel.listaModelos.toTypedArray(), ::removeItem)
-        recyclerView.adapter = adapter
+        modelAdapter = MyAdapter(viewModel.listaModelos.toTypedArray(), ::removeItem)
+        recyclerView.adapter = modelAdapter
 
         button_agregar_marca.setOnClickListener {
             val text = textInput_agregar_marca.text.toString()
@@ -122,8 +127,8 @@ class FormularioFragment : Fragment() {
                 }
 
                 viewModel.listaModelos.add(ModelListItem(marca, modelo, precio.toInt()))
-                adapter.myDataset = viewModel.listaModelos.toTypedArray()
-                adapter.notifyItemInserted(viewModel.listaModelos.size-1)
+                modelAdapter.myDataset = viewModel.listaModelos.toTypedArray()
+                modelAdapter.notifyItemInserted(viewModel.listaModelos.size-1)
 
             }
             Log.i("Lista Modelos", viewModel.listaModelos.toString())
@@ -133,8 +138,8 @@ class FormularioFragment : Fragment() {
 
     fun removeItem(index: Int){
         viewModel.listaModelos.removeAt(index)
-        adapter.myDataset = viewModel.listaModelos.toTypedArray()
-        adapter.notifyItemRemoved(index)
+        modelAdapter.myDataset = viewModel.listaModelos.toTypedArray()
+        modelAdapter.notifyItemRemoved(index)
         if (viewModel.listaModelos.isEmpty()){
             linearLayout_list_header.visibility = View.INVISIBLE
         }
